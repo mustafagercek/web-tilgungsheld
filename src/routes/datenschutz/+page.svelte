@@ -8,7 +8,7 @@
 		},
 		{
 			title: 'Keine Datenerhebung durch den Entwickler',
-			body: 'Tilgungsfreund verfügt über keine eigenen Server, keine Benutzerkonten und keine Internetanbindung für deine Daten. Alle Angaben, die du in der App machst – etwa Kreditdaten, Sondertilgungen und Einstellungen – verbleiben ausschließlich auf deinem Gerät. Der Entwickler hat zu keinem Zeitpunkt Zugriff auf diese Daten.'
+			body: 'Tilgungsheld verfügt über keine eigenen Server, keine Benutzerkonten und keine Internetanbindung für deine Daten. Alle Angaben, die du in der App machst – etwa Kreditdaten, Sondertilgungen und Einstellungen – verbleiben ausschließlich auf deinem Gerät. Der Entwickler hat zu keinem Zeitpunkt Zugriff auf diese Daten.'
 		},
 		{
 			title: 'Keine Analyse-, Tracking- oder Werbedienste',
@@ -24,7 +24,7 @@
 		},
 		{
 			title: 'Deine Rechte',
-			body: 'Da Tilgungsfreund keine personenbezogenen Daten erhebt, speichert oder verarbeitet, bestehen auf Seiten des Entwicklers grundsätzlich keine Verarbeitungsvorgänge, auf die sich Betroffenenrechte (z. B. Auskunft, Berichtigung, Löschung) nach der Datenschutz-Grundverordnung (DSGVO) beziehen könnten. Über deine eigenen, lokal gespeicherten Daten hast du jederzeit volle Kontrolle direkt in der App.'
+			body: 'Da Tilgungsheld keine personenbezogenen Daten erhebt, speichert oder verarbeitet, bestehen auf Seiten des Entwicklers grundsätzlich keine Verarbeitungsvorgänge, auf die sich Betroffenenrechte (z. B. Auskunft, Berichtigung, Löschung) nach der Datenschutz-Grundverordnung (DSGVO) beziehen könnten. Über deine eigenen, lokal gespeicherten Daten hast du jederzeit volle Kontrolle direkt in der App.'
 		},
 		{
 			title: 'Änderungen dieser Datenschutzerklärung',
@@ -34,7 +34,7 @@
 </script>
 
 <svelte:head>
-	<title>Datenschutzerklärung – Tilgungsfreund</title>
+	<title>Datenschutzerklärung – Tilgungsheld</title>
 </svelte:head>
 
 <LegalPage title="Datenschutzerklärung" lastUpdated="Stand: Oktober 2026" {sections} />

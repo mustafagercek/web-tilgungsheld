@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-	import LogoMark from '#lib/components/LogoMark.svelte';
 	import HeroMark from '#lib/components/HeroMark.svelte';
+	import AmortizationCalculator from '#lib/components/AmortizationCalculator.svelte';
 
 	const features = [
 		{
@@ -28,28 +27,12 @@
 </script>
 
 <svelte:head>
-	<title>Tilgungsfreund – Dein Kredit, transparent im Blick</title>
+	<title>Tilgungsheld – Dein Kredit, transparent im Blick</title>
 	<meta
 		name="description"
-		content="Tilgungsfreund verwaltet deine Immobilienkredite, Tilgungspläne und Sondertilgungen – lokal auf deinem Gerät, ohne Konto, ohne Cloud."
+		content="Tilgungsheld verwaltet deine Immobilienkredite, Tilgungspläne und Sondertilgungen – lokal auf deinem Gerät, ohne Konto, ohne Cloud."
 	/>
 </svelte:head>
-
-<header class="nav">
-	<div class="container nav__inner">
-		<a href={resolve('/')} class="nav__brand">
-			<LogoMark size={36} />
-			<span>Tilgungsfreund</span>
-		</a>
-		<nav class="nav__links">
-			<a href="#funktionen">Funktionen</a>
-			<a href={resolve('/tilgungsrechner')}>Rechner</a>
-			<a href="#privatsphaere">Privatsphäre</a>
-			<a href="#kontakt">Kontakt</a>
-		</nav>
-		<a href="#download" class="button button--primary nav__cta">App laden</a>
-	</div>
-</header>
 
 <main>
 	<section class="hero">
@@ -58,16 +41,29 @@
 				<p class="eyebrow hero__eyebrow">Baufinanzierung · Tilgung · Eigenkapital</p>
 				<h1>Dein Kredit.<br />Transparent. Unter Kontrolle.</h1>
 				<p class="hero__subtext">
-					Tilgungsfreund zeigt dir Fortschritt, Tilgungsplan und Eigenkapital deiner Immobilienkredite
+					Tilgungsheld zeigt dir Fortschritt, Tilgungsplan und Eigenkapital deiner Immobilienkredite
 					auf einen Blick – und simuliert Sondertilgungen, bevor du sie wirklich machst.
 				</p>
 				<div class="hero__actions">
 					<a href="#download" class="button button--primary">Jetzt im App Store</a>
-					<a href={resolve('/tilgungsrechner')} class="button button--ghost">Rechner testen</a>
+					<a href="#rechner" class="button button--ghost">Rechner testen</a>
 				</div>
 			</div>
 			<div class="hero__visual">
 				<HeroMark size={280} />
+			</div>
+		</div>
+	</section>
+
+	<section class="rechner" id="rechner">
+		<div class="container">
+			<h2 class="section-title">Probier's direkt aus</h2>
+			<p class="section-subtitle">
+				Die gleiche Berechnung wie in der App: feste monatliche Rate aus Zinssatz und anfänglicher
+				Tilgungsrate. Kein Download, keine Anmeldung.
+			</p>
+			<div class="rechner__body">
+				<AmortizationCalculator />
 			</div>
 		</div>
 	</section>
@@ -117,7 +113,7 @@
 				<p class="eyebrow privacy__eyebrow">Privacy by design</p>
 				<h2>Keine Server. Keine Konten. Keine Ausnahme.</h2>
 				<p>
-					Tilgungsfreund speichert alles, was du einträgst, ausschließlich lokal auf deinem Gerät.
+					Tilgungsheld speichert alles, was du einträgst, ausschließlich lokal auf deinem Gerät.
 					Es gibt keine Benutzerkonten, keine Cloud-Synchronisierung und keine Analyse- oder
 					Tracking-Dienste von Drittanbietern. Deine Kreditdaten verlassen dein Gerät nie.
 				</p>
@@ -142,71 +138,7 @@
 	</section>
 </main>
 
-<footer class="footer" id="kontakt">
-	<div class="container footer__inner">
-		<div class="nav__brand footer__brand">
-			<LogoMark size={28} />
-			<span>Tilgungsfreund</span>
-		</div>
-		<nav class="footer__links">
-			<a href={resolve('/datenschutz')}>Datenschutz</a>
-			<a href={resolve('/nutzungsbedingungen')}>Nutzungsbedingungen</a>
-			<a href="mailto:mustafa.gercek@nicetoapp.de">Kontakt</a>
-		</nav>
-		<p class="footer__copy">© {new Date().getFullYear()} Tilgungsfreund</p>
-	</div>
-</footer>
-
 <style>
-	.nav {
-		position: sticky;
-		top: 0;
-		z-index: 10;
-		background: rgba(248, 250, 252, 0.8);
-		backdrop-filter: blur(12px);
-		border-bottom: 1px solid var(--color-border);
-	}
-
-	.nav__inner {
-		display: flex;
-		align-items: center;
-		gap: 24px;
-		padding-block: 14px;
-	}
-
-	.nav__brand {
-		display: inline-flex;
-		align-items: center;
-		gap: 10px;
-		font-weight: 700;
-		font-size: 17px;
-		text-decoration: none;
-		color: var(--color-text);
-	}
-
-	.nav__links {
-		display: flex;
-		gap: 28px;
-		margin-inline: auto;
-		font-size: 14.5px;
-		font-weight: 500;
-	}
-
-	.nav__links a {
-		text-decoration: none;
-		color: var(--color-text-muted);
-		transition: color 0.15s ease;
-	}
-
-	.nav__links a:hover {
-		color: var(--color-text);
-	}
-
-	.nav__cta {
-		padding: 10px 18px;
-		font-size: 14px;
-	}
-
 	.hero {
 		background: linear-gradient(180deg, #1e1b4b 0%, #312e81 100%);
 		color: var(--color-text-on-dark);
@@ -267,7 +199,15 @@
 	}
 
 	.features {
+		padding-block: 0 96px;
+	}
+
+	.rechner {
 		padding-block: 96px;
+	}
+
+	.rechner__body {
+		margin-top: 40px;
 	}
 
 	.feature-grid {
@@ -402,43 +342,6 @@
 		margin-top: 28px;
 	}
 
-	.footer {
-		border-top: 1px solid var(--color-border);
-		padding-block: 32px;
-	}
-
-	.footer__inner {
-		display: flex;
-		align-items: center;
-		gap: 24px;
-		flex-wrap: wrap;
-	}
-
-	.footer__brand {
-		font-size: 15px;
-	}
-
-	.footer__links {
-		display: flex;
-		gap: 20px;
-		margin-inline-end: auto;
-		font-size: 14px;
-	}
-
-	.footer__links a {
-		text-decoration: none;
-		color: var(--color-text-muted);
-	}
-
-	.footer__links a:hover {
-		color: var(--color-text);
-	}
-
-	.footer__copy {
-		font-size: 13px;
-		color: var(--color-text-muted);
-	}
-
 	@media (max-width: 860px) {
 		.hero__inner {
 			grid-template-columns: 1fr;
@@ -455,10 +358,6 @@
 
 		.privacy__inner {
 			grid-template-columns: 1fr;
-		}
-
-		.nav__links {
-			display: none;
 		}
 	}
 </style>

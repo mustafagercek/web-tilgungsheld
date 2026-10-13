@@ -4,15 +4,15 @@
 	const sections = [
 		{
 			title: 'Geltungsbereich',
-			body: 'Diese Nutzungsbedingungen gelten für die Nutzung der App Tilgungsfreund („App“). Mit dem Herunterladen und der Nutzung der App stimmst du diesen Bedingungen zu.'
+			body: 'Diese Nutzungsbedingungen gelten für die Nutzung der App Tilgungsheld („App“). Mit dem Herunterladen und der Nutzung der App stimmst du diesen Bedingungen zu.'
 		},
 		{
-			title: 'Was Tilgungsfreund ist',
-			body: 'Tilgungsfreund ist ein persönliches Werkzeug zur Berechnung und Verwaltung von Immobilienkrediten (z. B. Rate, Zinskosten, Tilgungsverlauf, Sondertilgungen). Die App dient Privatpersonen zur eigenen Orientierung.'
+			title: 'Was Tilgungsheld ist',
+			body: 'Tilgungsheld ist ein persönliches Werkzeug zur Berechnung und Verwaltung von Immobilienkrediten (z. B. Rate, Zinskosten, Tilgungsverlauf, Sondertilgungen). Die App dient Privatpersonen zur eigenen Orientierung.'
 		},
 		{
 			title: 'Lokale Datenspeicherung',
-			body: 'Alle Daten, die du in der App einträgst – etwa Kreditdaten, Sondertilgungen und Einstellungen – werden ausschließlich lokal auf deinem Gerät gespeichert. Tilgungsfreund betreibt keine eigenen Server und bietet keine Benutzerkonten an. Es werden keine Daten an den Entwickler, an Dritte oder an einen Cloud-Dienst übertragen, dort gespeichert oder mit anderen geteilt.'
+			body: 'Alle Daten, die du in der App einträgst – etwa Kreditdaten, Sondertilgungen und Einstellungen – werden ausschließlich lokal auf deinem Gerät gespeichert. Tilgungsheld betreibt keine eigenen Server und bietet keine Benutzerkonten an. Es werden keine Daten an den Entwickler, an Dritte oder an einen Cloud-Dienst übertragen, dort gespeichert oder mit anderen geteilt.'
 		},
 		{
 			title: 'Keine Finanz-, Steuer- oder Rechtsberatung',
@@ -20,7 +20,7 @@
 		},
 		{
 			title: 'Haftungsausschluss',
-			body: 'Die App wird „wie besehen“ ohne Mängelgewähr bereitgestellt. Tilgungsfreund übernimmt keine Gewähr für die Richtigkeit, Vollständigkeit oder Aktualität der Berechnungen und haftet, soweit gesetzlich zulässig, nicht für Schäden aus der Nutzung der App.'
+			body: 'Die App wird „wie besehen“ ohne Mängelgewähr bereitgestellt. Tilgungsheld übernimmt keine Gewähr für die Richtigkeit, Vollständigkeit oder Aktualität der Berechnungen und haftet, soweit gesetzlich zulässig, nicht für Schäden aus der Nutzung der App.'
 		},
 		{
 			title: 'Eigenverantwortung für Datensicherung',
@@ -34,7 +34,7 @@
 </script>
 
 <svelte:head>
-	<title>Nutzungsbedingungen – Tilgungsfreund</title>
+	<title>Nutzungsbedingungen – Tilgungsheld</title>
 </svelte:head>
 
 <LegalPage title="Nutzungsbedingungen" lastUpdated="Stand: Oktober 2026" {sections} />

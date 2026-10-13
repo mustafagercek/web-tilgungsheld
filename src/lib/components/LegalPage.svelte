@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-	import LogoMark from '#lib/components/LogoMark.svelte';
-
 	let {
 		title,
 		lastUpdated,
@@ -12,16 +9,6 @@
 		sections: { title: string; body: string }[];
 	} = $props();
 </script>
-
-<header class="nav">
-	<div class="container nav__inner">
-		<a href={resolve('/')} class="nav__brand">
-			<LogoMark size={36} />
-			<span>Tilgungsfreund</span>
-		</a>
-		<a href={resolve('/')} class="back">← Zurück</a>
-	</div>
-</header>
 
 <main class="container legal">
 	<h1>{title}</h1>
@@ -36,38 +23,6 @@
 </main>
 
 <style>
-	.nav {
-		border-bottom: 1px solid var(--color-border);
-	}
-
-	.nav__inner {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding-block: 14px;
-	}
-
-	.nav__brand {
-		display: inline-flex;
-		align-items: center;
-		gap: 10px;
-		font-weight: 700;
-		font-size: 17px;
-		text-decoration: none;
-		color: var(--color-text);
-	}
-
-	.back {
-		font-size: 14.5px;
-		font-weight: 500;
-		color: var(--color-text-muted);
-		text-decoration: none;
-	}
-
-	.back:hover {
-		color: var(--color-text);
-	}
-
 	.legal {
 		max-width: 720px;
 		padding-block: 64px 96px;
