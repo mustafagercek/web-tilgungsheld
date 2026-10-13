@@ -1,0 +1,117 @@
+:root {
+	--color-ink: #1e1b4b;
+	--color-ink-soft: #312e81;
+	--color-mint: #34d399;
+	--color-mint-dark: #10b981;
+	--color-bg: #f8fafc;
+	--color-surface: #ffffff;
+	--color-border: #e5e7eb;
+	--color-text: #1e1b4b;
+	--color-text-muted: #52526a;
+	--color-text-on-dark: #f5f5ff;
+	--color-text-on-dark-muted: #c7c6e8;
+
+	--radius-lg: 24px;
+	--radius-md: 16px;
+	--radius-sm: 10px;
+
+	--shadow-card: 0 1px 2px rgba(30, 27, 75, 0.04), 0 8px 24px rgba(30, 27, 75, 0.06);
+	--shadow-card-hover: 0 1px 2px rgba(30, 27, 75, 0.06), 0 16px 40px rgba(30, 27, 75, 0.1);
+
+	--font-sans:
+		-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, system-ui, sans-serif;
+
+	color-scheme: light;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+	background: var(--color-bg);
+	color: var(--color-text);
+	font-family: var(--font-sans);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+p {
+	margin: 0;
+}
+
+a {
+	color: inherit;
+}
+
+img,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+.container {
+	width: 100%;
+	max-width: 1120px;
+	margin-inline: auto;
+	padding-inline: 24px;
+}
+
+.button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 14px 26px;
+	border-radius: 999px;
+	font-size: 15px;
+	font-weight: 600;
+	text-decoration: none;
+	border: 1px solid transparent;
+	cursor: pointer;
+	transition:
+		transform 0.15s ease,
+		box-shadow 0.15s ease,
+		background-color 0.15s ease;
+}
+
+.button:active {
+	transform: scale(0.97);
+}
+
+.button--primary {
+	background: var(--color-mint);
+	color: #06251b;
+}
+
+.button--primary:hover {
+	background: var(--color-mint-dark);
+}
+
+.button--ghost {
+	background: rgba(255, 255, 255, 0.08);
+	color: var(--color-text-on-dark);
+	border-color: rgba(255, 255, 255, 0.24);
+}
+
+.button--ghost:hover {
+	background: rgba(255, 255, 255, 0.16);
+}
+
+.eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+}
