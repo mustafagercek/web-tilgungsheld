@@ -43,6 +43,7 @@
 		</a>
 		<nav class="nav__links">
 			<a href="#funktionen">Funktionen</a>
+			<a href={resolve('/tilgungsrechner')}>Rechner</a>
 			<a href="#privatsphaere">Privatsphäre</a>
 			<a href="#kontakt">Kontakt</a>
 		</nav>
@@ -62,7 +63,7 @@
 				</p>
 				<div class="hero__actions">
 					<a href="#download" class="button button--primary">Jetzt im App Store</a>
-					<a href="#funktionen" class="button button--ghost">Funktionen ansehen</a>
+					<a href={resolve('/tilgungsrechner')} class="button button--ghost">Rechner testen</a>
 				</div>
 			</div>
 			<div class="hero__visual">
