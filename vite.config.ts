@@ -17,12 +17,13 @@ export default defineConfig({
 				fallback: undefined // every route is prerendered up front; see +layout.ts
 			}),
 
-			// Empty because we're deploying to a custom domain (served from the root). If you
-			// instead deploy to the default <user>.github.io/<repo> project-page URL without a
-			// custom domain attached yet, set this to '/<repo-name>' so asset links resolve
-			// correctly under that subpath.
+			// Serving from the default https://mustafagercek.github.io/web-tilgungsheld/
+			// project-page URL for now (no custom domain attached yet) — the site lives under
+			// this subpath, not the root, so every asset link needs it prefixed or they'd all
+			// resolve to the wrong place. Change this back to '' once a custom domain is attached
+			// and the site is served from its root instead.
 			paths: {
-				base: ''
+				base: '/web-tilgungsheld'
 			}
 		})
 	],

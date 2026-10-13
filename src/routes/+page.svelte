@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import LogoMark from '#lib/components/LogoMark.svelte';
 	import HeroMark from '#lib/components/HeroMark.svelte';
 
@@ -36,7 +37,7 @@
 
 <header class="nav">
 	<div class="container nav__inner">
-		<a href="/" class="nav__brand">
+		<a href={resolve('/')} class="nav__brand">
 			<LogoMark size={36} />
 			<span>Tilgungsfreund</span>
 		</a>
@@ -147,8 +148,8 @@
 			<span>Tilgungsfreund</span>
 		</div>
 		<nav class="footer__links">
-			<a href="/datenschutz">Datenschutz</a>
-			<a href="/nutzungsbedingungen">Nutzungsbedingungen</a>
+			<a href={resolve('/datenschutz')}>Datenschutz</a>
+			<a href={resolve('/nutzungsbedingungen')}>Nutzungsbedingungen</a>
 			<a href="mailto:mustafa.gercek@nicetoapp.de">Kontakt</a>
 		</nav>
 		<p class="footer__copy">© {new Date().getFullYear()} Tilgungsfreund</p>

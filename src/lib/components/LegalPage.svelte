@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import LogoMark from '#lib/components/LogoMark.svelte';
 
 	let {
@@ -14,11 +15,11 @@
 
 <header class="nav">
 	<div class="container nav__inner">
-		<a href="/" class="nav__brand">
+		<a href={resolve('/')} class="nav__brand">
 			<LogoMark size={36} />
 			<span>Tilgungsfreund</span>
 		</a>
-		<a href="/" class="back">← Zurück</a>
+		<a href={resolve('/')} class="back">← Zurück</a>
 	</div>
 </header>
 
