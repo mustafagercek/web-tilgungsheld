@@ -1,8 +1,32 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
+	import { paths } from '#lib/i18n/paths.ts';
+	import type { Locale } from '#lib/i18n/locales.ts';
+	import { messages } from '#lib/i18n/messages.ts';
 	import LogoMark from '#lib/components/LogoMark.svelte';
 
-	const home = resolve('/');
+	const lang = $derived(page.params.lang as Locale);
+	const t = $derived(messages[lang]);
+
+	const home = $derived(paths.home(lang));
+	const rechner = $derived(paths.tilgungsrechner(lang));
+
+	const otherLang = $derived<Locale>(lang === 'de' ? 'en' : 'de');
+	// Switches to the same page in the other language, not just its home page.
+	const switchHref = $derived.by(() => {
+		switch (page.route.id) {
+			case '/[lang]/tilgungsrechner':
+				return paths.tilgungsrechner(otherLang);
+			case '/[lang]/datenschutz':
+				return paths.datenschutz(otherLang);
+			case '/[lang]/nutzungsbedingungen':
+				return paths.nutzungsbedingungen(otherLang);
+			case '/[lang]/impressum':
+				return paths.impressum(otherLang);
+			default:
+				return paths.home(otherLang);
+		}
+	});
 </script>
 
 <!--
@@ -13,16 +37,18 @@
 <header class="nav">
 	<div class="container nav__inner">
 		<a href={home} class="nav__brand">
-			<LogoMark size={36} />
+			<LogoMark size={36} inverted />
 			<span>Tilgungsheld</span>
 		</a>
 		<nav class="nav__links">
-			<a href="{home}#funktionen">Funktionen</a>
-			<a href="{home}#rechner">Rechner</a>
-			<a href="{home}#privatsphaere">Privatsphäre</a>
-			<a href="{home}#kontakt">Kontakt</a>
+			<a href={rechner} class:active={page.route.id === '/[lang]/tilgungsrechner'}
+				>{t.nav.rechner}</a
+			>
 		</nav>
-		<a href="{home}#download" class="button button--primary nav__cta">App laden</a>
+		<a href={switchHref} class="nav__lang" aria-label="{lang === 'de' ? 'English' : 'Deutsch'}"
+			>{otherLang.toUpperCase()}</a
+		>
+		<a href="{home}#download" class="button button--primary nav__cta">{t.nav.appLaden}</a>
 	</div>
 </header>
 
@@ -69,6 +95,32 @@
 
 	.nav__links a:hover {
 		color: var(--color-text);
+	}
+
+	.nav__links a.active {
+		color: var(--color-text);
+		font-weight: 700;
+		border-bottom: 2px solid var(--color-mint-dark);
+		padding-bottom: 2px;
+	}
+
+	.nav__lang {
+		text-decoration: none;
+		color: var(--color-text-muted);
+		font-size: 13px;
+		font-weight: 700;
+		letter-spacing: 0.02em;
+		border: 1px solid var(--color-border);
+		border-radius: 999px;
+		padding: 5px 10px;
+		transition:
+			color 0.15s ease,
+			border-color 0.15s ease;
+	}
+
+	.nav__lang:hover {
+		color: var(--color-text);
+		border-color: var(--color-text-muted);
 	}
 
 	.nav__cta {

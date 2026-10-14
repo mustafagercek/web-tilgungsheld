@@ -1,59 +1,171 @@
 <script lang="ts">
-	import { calculateAmortization } from '#lib/domain/calculator.ts';
+	import { page } from '$app/state';
+	import { calculateForRepaymentInput, type RepaymentMode } from '#lib/domain/calculator.ts';
+	import { dateForScheduleMonth } from '#lib/domain/scheduleDate.ts';
+	import type { Locale } from '#lib/i18n/locales.ts';
+	import { intlLocale } from '#lib/i18n/locales.ts';
+	import { messages } from '#lib/i18n/messages.ts';
+	import { paths } from '#lib/i18n/paths.ts';
+	import PercentageSlider from '#lib/components/PercentageSlider.svelte';
+	import CurrencyAmountField from '#lib/components/CurrencyAmountField.svelte';
+	import LabeledValueField from '#lib/components/LabeledValueField.svelte';
 
-	let principal = $state(250_000);
-	let interestRate = $state(3.5);
-	let amortizationRate = $state(2.0);
+	let {
+		principal = $bindable(200_000),
+		interestRate = $bindable(4.2),
+		repaymentMode = $bindable<RepaymentMode>('amortizationRate'),
+		amortizationRate = $bindable(2.0),
+		desiredDurationYears = $bindable(25),
+		desiredMonthlyPayment = $bindable(1_000),
+		showCalculateLink = false
+	}: {
+		principal?: number;
+		interestRate?: number;
+		repaymentMode?: RepaymentMode;
+		amortizationRate?: number;
+		desiredDurationYears?: number;
+		desiredMonthlyPayment?: number;
+		showCalculateLink?: boolean;
+	} = $props();
+
+	const lang = $derived(page.params.lang as Locale);
+	const t = $derived(messages[lang].calculator);
+
+	const modes: { mode: RepaymentMode; label: string }[] = $derived([
+		{ mode: 'amortizationRate', label: t.modeAmortizationRate },
+		{ mode: 'desiredDuration', label: t.modeDesiredDuration },
+		{ mode: 'desiredMonthlyPayment', label: t.modeDesiredMonthlyPayment }
+	]);
 
 	const result = $derived(
-		calculateAmortization(principal, interestRate / 100, amortizationRate / 100)
+		calculateForRepaymentInput(principal, interestRate, {
+			mode: repaymentMode,
+			amortizationRatePercent: amortizationRate,
+			desiredDurationYears,
+			desiredMonthlyPayment
+		})
 	);
 
-	const currency = new Intl.NumberFormat('de-DE', {
-		style: 'currency',
-		currency: 'EUR',
-		maximumFractionDigits: 0
-	});
+	const currency = $derived(
+		new Intl.NumberFormat(intlLocale(lang), {
+			style: 'currency',
+			currency: 'EUR',
+			maximumFractionDigits: 0
+		})
+	);
 
-	function durationText(totalMonths: number): string {
-		const years = Math.floor(totalMonths / 12);
-		const months = totalMonths % 12;
-		if (months === 0) return `${years} Jahre`;
-		return `${years} Jahre, ${months} Monate`;
-	}
+	const payoffDateFormat = $derived(
+		new Intl.DateTimeFormat(intlLocale(lang), { month: 'short', year: 'numeric' })
+	);
+	const payoffDate = $derived(
+		result.totalMonths > 0 ? payoffDateFormat.format(dateForScheduleMonth(result.totalMonths)) : '—'
+	);
+
+	const calculatorHref = $derived(
+		`${paths.tilgungsrechner(lang)}?principal=${principal}&interestRate=${interestRate}&mode=${repaymentMode}&amortizationRate=${amortizationRate}&durationYears=${desiredDurationYears}&monthlyPayment=${desiredMonthlyPayment}`
+	);
 </script>
 
 <div class="calculator__grid">
 	<div class="card inputs">
-		<label>
-			<span>Darlehenssumme</span>
-			<input type="number" bind:value={principal} min="1000" step="1000" />
-		</label>
-		<label>
-			<span>Zinssatz (% p.a.)</span>
-			<input type="number" bind:value={interestRate} min="0" step="0.05" />
-		</label>
-		<label>
-			<span>Anfängliche Tilgungsrate (% p.a.)</span>
-			<input type="number" bind:value={amortizationRate} min="0" step="0.1" />
-		</label>
+		<div class="principal-field">
+			<span class="principal-field__label">{t.principalLabel}</span>
+			<CurrencyAmountField bind:value={principal} locale={intlLocale(lang)} />
+		</div>
+		<PercentageSlider
+			label={t.interestRateLabel}
+			bind:value={interestRate}
+			decrementLabel={t.decrementAria}
+			incrementLabel={t.incrementAria}
+		/>
+
+		<div class="repayment-mode">
+			<span class="repayment-mode__label">{t.rueckzahlungLabel}</span>
+			<div class="repayment-mode__switch">
+				{#each modes as option (option.mode)}
+					<button
+						type="button"
+						class="repayment-mode__option"
+						class:repayment-mode__option--active={repaymentMode === option.mode}
+						onclick={() => (repaymentMode = option.mode)}
+					>
+						{option.label}
+					</button>
+				{/each}
+			</div>
+		</div>
+
+		<!--
+		  All three fields are always mounted, stacked in the same grid cell (one `display:none` CSS
+		  trick layer deeper) — the cell then sizes to the tallest of the three, so it never changes
+		  size when switching modes, regardless of actual pixel heights. Only the active one is
+		  visible; the others are `visibility:hidden` (not `display:none`) so they still occupy
+		  their slot for sizing purposes, and `visibility:hidden` also removes them from tab order.
+		-->
+		<div class="repayment-field">
+			<div
+				class="repayment-field__slot"
+				class:repayment-field__slot--hidden={repaymentMode !== 'amortizationRate'}
+			>
+				<PercentageSlider
+					label={t.amortizationRateLabel}
+					bind:value={amortizationRate}
+					decrementLabel={t.decrementAria}
+					incrementLabel={t.incrementAria}
+				/>
+			</div>
+			<div
+				class="repayment-field__slot"
+				class:repayment-field__slot--hidden={repaymentMode !== 'desiredDuration'}
+			>
+				<LabeledValueField
+					label={t.desiredDurationYearsLabel}
+					bind:value={desiredDurationYears}
+					unit={t.yearsUnit}
+					min={1}
+				/>
+			</div>
+			<div
+				class="repayment-field__slot"
+				class:repayment-field__slot--hidden={repaymentMode !== 'desiredMonthlyPayment'}
+			>
+				<div class="desired-payment-field">
+					<span class="desired-payment-field__label">{t.desiredMonthlyPaymentLabel}</span>
+					<CurrencyAmountField
+						bind:value={desiredMonthlyPayment}
+						locale={intlLocale(lang)}
+						compact
+					/>
+				</div>
+			</div>
+		</div>
+
+		{#if showCalculateLink}
+			<a href={calculatorHref} class="button button--primary calculator__cta">{t.berechnen}</a>
+		{/if}
 	</div>
 
 	<div class="card results">
 		<div class="result">
-			<span class="result__label">Monatliche Rate</span>
+			<span class="result__label">{t.monatlicheRate}</span>
 			<span class="result__value">{currency.format(result.monthlyPayment)}</span>
 		</div>
 		<div class="result">
-			<span class="result__label">Laufzeit</span>
-			<span class="result__value">{durationText(result.totalMonths)}</span>
+			<span class="result__label">{t.laufzeit}</span>
+			<span class="result__value"
+				>{t.duration(Math.floor(result.totalMonths / 12), result.totalMonths % 12)}</span
+			>
 		</div>
 		<div class="result">
-			<span class="result__label">Gesamtzinsen</span>
+			<span class="result__label">{t.payoffDate}</span>
+			<span class="result__value">{payoffDate}</span>
+		</div>
+		<div class="result">
+			<span class="result__label">{t.gesamtzinsen}</span>
 			<span class="result__value">{currency.format(result.totalInterest)}</span>
 		</div>
 		<div class="result result--accent">
-			<span class="result__label">Gesamtsumme</span>
+			<span class="result__label">{t.gesamtsumme}</span>
 			<span class="result__value">{currency.format(result.totalRepayment)}</span>
 		</div>
 	</div>
@@ -64,7 +176,9 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 20px;
-		align-items: start;
+		/* Grid's default (stretch) rather than `start` — so the inputs and results cards always
+		   match height, even when one has more content than the other (e.g. the "Berechnen" link
+		   only shown on the landing page, or different repayment-mode fields). */
 	}
 
 	.card {
@@ -78,37 +192,115 @@
 	.inputs {
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
 		gap: 20px;
 	}
 
-	.inputs label {
+	.principal-field {
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		align-items: center;
+		gap: 4px;
+		padding-bottom: 4px;
+	}
+
+	.principal-field__label {
+		font-size: 13px;
+		font-weight: 600;
+		color: var(--color-text-muted);
+	}
+
+	.desired-payment-field {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 12px;
+	}
+
+	.desired-payment-field__label {
 		font-size: 14px;
 		font-weight: 600;
 		color: var(--color-text-muted);
 	}
 
-	.inputs input {
-		font-family: var(--font-sans);
-		font-size: 17px;
-		font-weight: 600;
-		color: var(--color-text);
-		padding: 12px 14px;
-		border-radius: var(--radius-sm);
-		border: 1px solid var(--color-border);
-		background: var(--color-bg);
+	.repayment-mode {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		margin-top: 4px;
 	}
 
-	.inputs input:focus {
-		outline: 2px solid var(--color-mint);
-		outline-offset: 1px;
+	.repayment-mode__label {
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--color-text-muted);
+	}
+
+	.repayment-mode__switch {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	.repayment-mode__option {
+		all: unset;
+		cursor: pointer;
+		padding: 7px 14px;
+		border-radius: 999px;
+		border: 1px solid var(--color-border);
+		font-size: 12.5px;
+		font-weight: 600;
+		color: var(--color-text-muted);
+		transition:
+			background-color 0.15s ease,
+			color 0.15s ease,
+			border-color 0.15s ease;
+	}
+
+	.repayment-mode__option:hover {
+		border-color: var(--color-text-muted);
+		color: var(--color-text);
+	}
+
+	.repayment-mode__option--active {
+		background: var(--color-mint);
+		border-color: var(--color-mint);
+		color: #06251b;
+	}
+
+	.repayment-mode__option--active:hover {
+		border-color: var(--color-mint);
+		color: #06251b;
+	}
+
+	/* All three swappable fields stack in this one grid cell, so its height is always the tallest
+	   of the three — switching modes never changes the card's overall height. */
+	.repayment-field {
+		display: grid;
+		margin-top: 4px;
+	}
+
+	.repayment-field__slot {
+		grid-area: 1 / 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.repayment-field__slot--hidden {
+		visibility: hidden;
+		pointer-events: none;
+	}
+
+	.calculator__cta {
+		justify-content: center;
+		margin-top: 4px;
 	}
 
 	.results {
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
 		gap: 18px;
 	}
 

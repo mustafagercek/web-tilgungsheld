@@ -1,20 +1,27 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
+	import { paths } from '#lib/i18n/paths.ts';
+	import type { Locale } from '#lib/i18n/locales.ts';
+	import { messages } from '#lib/i18n/messages.ts';
 	import LogoMark from '#lib/components/LogoMark.svelte';
+
+	const lang = $derived(page.params.lang as Locale);
+	const t = $derived(messages[lang]);
 </script>
 
 <footer class="footer" id="kontakt">
 	<div class="container footer__inner">
 		<div class="nav__brand footer__brand">
-			<LogoMark size={28} />
+			<LogoMark size={28} inverted />
 			<span>Tilgungsheld</span>
 		</div>
 		<nav class="footer__links">
-			<a href={resolve('/datenschutz')}>Datenschutz</a>
-			<a href={resolve('/nutzungsbedingungen')}>Nutzungsbedingungen</a>
-			<a href="mailto:mustafa.gercek@nicetoapp.de">Kontakt</a>
+			<a href={paths.impressum(lang)}>{t.footer.impressum}</a>
+			<a href={paths.datenschutz(lang)}>{t.footer.datenschutz}</a>
+			<a href={paths.nutzungsbedingungen(lang)}>{t.footer.nutzungsbedingungen}</a>
+			<a href="mailto:mustafa.gercek@nicetoapp.de">{t.footer.kontakt}</a>
 		</nav>
-		<p class="footer__copy">© {new Date().getFullYear()} Tilgungsheld</p>
+		<p class="footer__copy">{t.footer.copyright(new Date().getFullYear())}</p>
 	</div>
 </footer>
 
